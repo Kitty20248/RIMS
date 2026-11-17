@@ -7,6 +7,8 @@ Upon starting in ImageJ (FIJI), RIMS displays a textbox menu prompting the user 
 - Crop all images in folder
 - Rename all images in folder
 - Resize all images in folder
+- Flip all images in a folder horizontally
+- Flip all images in a folder vertically
 - Make all images in folder grayscale
 - Transfer images to individual folders
 - Change file format of images
