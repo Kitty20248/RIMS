@@ -291,9 +291,14 @@ setBatchMode(true);
 open(inputFolder + imageList[j]);
 title = getTitle(); // identify image filename 
 
+// remove original file extension before saving 
+dot = lastIndexOf(title, ".");
+if (dot != -1)
+title = substring(title, 0, dot);
+
 run("Flip Horizontally");
 
-saveAs("PNG", HORIZONTALLY_FLIPPED_FOLDER + File.separator + title + "_horizontalFlip");
+saveAs("PNG", HORIZONTALLY_FLIPPED_FOLDER + File.separator + title + "_horizontalFlip.png");
 run("Close All");
 setBatchMode(false);
 }
@@ -336,9 +341,14 @@ setBatchMode(true);
 open(inputFolder + imageList[j]);
 title = getTitle(); // identify image filename 
 
+// remove original file extension before saving 
+dot = lastIndexOf(title, ".");
+if (dot != -1)
+title = substring(title, 0, dot);
+
 run("Flip Vertically");
 
-saveAs("PNG", VERTICALLY_FLIPPED_FOLDER + File.separator + title + "_verticalFlip");
+saveAs("PNG", VERTICALLY_FLIPPED_FOLDER + File.separator + title + "_verticalFlip.png");
 run("Close All");
 setBatchMode(false);
 }
