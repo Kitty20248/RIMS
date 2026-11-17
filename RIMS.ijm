@@ -8,8 +8,18 @@ macro "AutoRunAndHide" {  // runs once file is selected from the 'More Tools' >>
 
 // DETERMINE ROUTINE TASK 
 Dialog.create("RIMS: Routine ImageJ Macro Suite");
-items = newArray("Crop all images in folder", "Rename all images in folder", "Resize all images in folder", "Make all images in folder grayscale", "Transfer images to individual folders", "Change file format of images", "Convert .vsi to .tif for all images", "Turn video into individual images (frames)", "Turn image set into video frames");
-Dialog.addRadioButtonGroup("Options", items, 9,1, "Crop all images in folder");
+items = newArray("Crop all images in folder", 
+                 "Rename all images in folder", 
+                 "Resize all images in folder", 
+                 "Flip all images in a folder horizontally", 
+                 "Flip all images in a folder vertically",
+                 "Make all images in folder grayscale", 
+                 "Transfer images to individual folders", 
+                 "Change file format of images", 
+                 "Convert .vsi to .tif for all images", 
+                 "Turn video into individual images (frames)", 
+                 "Turn image set into video frames");
+Dialog.addRadioButtonGroup("Options", items, 11,1, "Crop all images in folder");
 Dialog.show;
 TASK = Dialog.getRadioButton();
 
@@ -25,6 +35,20 @@ File.makeDirectory(OUTPUT_FOLDER);
 
 imageList = getFileList(inputFolder); // get list of image files in input folder
 
+fileName1 = imageList[1];
+
+if (endsWith(fileName1, ".png") || 
+    endsWith(fileName1, ".tif") ||
+    endsWith(fileName1, ".tiff") ||
+    endsWith(fileName1, ".jpg") ||
+    endsWith(fileName1, ".jpeg") ||
+    endsWith(fileName1, ".bmp") ||
+    endsWith(fileName1, ".PNG") ||
+    endsWith(fileName1, ".TIF") ||
+    endsWith(fileName1, ".TIFF") ||
+    endsWith(fileName1, ".JPEG") ||
+    endsWith(fileName1, ".BMP")) {
+
 // user defines crop area for first image 
 open(inputFolder+imageList[1]); // open first image
 image=getImageID();
@@ -32,6 +56,7 @@ selectImage(image);
 run("Enhance Contrast...", "saturated=0.5");
 setTool("rectangle");
 waitForUser("Draw ROI around image then click OK here");
+
 // if no ROI has been selected 
 if (selectionType() == -1) {
 waitForUser("Draw ROI and THEN click OK here");
@@ -39,9 +64,25 @@ getSelectionBounds(x,y,width,height);
 close();
 
 // automatically loop through image files 
-setBatchMode(true);
 for (j=0; j<imageList.length; j++) // loop through image file list 
 {
+
+// isolate filename from file extension 
+fileName = imageList[j];
+
+if (endsWith(fileName, ".png") || 
+    endsWith(fileName, ".tif") ||
+    endsWith(fileName, ".tiff") ||
+    endsWith(fileName, ".jpg") ||
+    endsWith(fileName, ".jpeg") ||
+    endsWith(fileName, ".bmp") ||
+    endsWith(fileName, ".PNG") ||
+    endsWith(fileName, ".TIF") ||
+    endsWith(fileName, ".TIFF") ||
+    endsWith(fileName, ".JPEG") ||
+    endsWith(fileName, ".BMP")) {
+
+setBatchMode(true);
 open(inputFolder + imageList[j]);
 title = getTitle(); // identify image filename 
 makeRectangle(x, y, width, height);
@@ -51,13 +92,31 @@ run("Close All");
 }
 setBatchMode(false);
 }
+}
+
 // if an ROI has been selected
 else {
 getSelectionBounds(x,y,width,height);
 close();
-setBatchMode(true);
+
 for (j=0; j<imageList.length; j++) // loop through image file list 
 {
+// isolate filename from file extension 
+fileName = imageList[j];
+
+if (endsWith(fileName, ".png") || 
+    endsWith(fileName, ".tif") ||
+    endsWith(fileName, ".tiff") ||
+    endsWith(fileName, ".jpg") ||
+    endsWith(fileName, ".jpeg") ||
+    endsWith(fileName, ".bmp") ||
+    endsWith(fileName, ".PNG") ||
+    endsWith(fileName, ".TIF") ||
+    endsWith(fileName, ".TIFF") ||
+    endsWith(fileName, ".JPEG") ||
+    endsWith(fileName, ".BMP")) {
+
+setBatchMode(true);
 open(inputFolder + imageList[j]);
 title = getTitle(); // identify image filename 
 makeRectangle(x, y, width, height);
@@ -66,6 +125,8 @@ saveAs("PNG", OUTPUT_FOLDER + File.separator + title);
 run("Close All");	
 }
 setBatchMode(false);
+}
+}
 }
 waitForUser("Task is complete. Cropped images are in output folder");
 }
@@ -81,6 +142,20 @@ File.makeDirectory(OUTPUT_FOLDER);
 
 imageList = getFileList(inputFolder); // get list of image files in input folder
 
+// isolate filename from file extension 
+fileName1 = imageList[1];
+if (endsWith(fileName1, ".png") || 
+    endsWith(fileName1, ".tif") ||
+    endsWith(fileName1, ".tiff") ||
+    endsWith(fileName1, ".jpg") ||
+    endsWith(fileName1, ".jpeg") ||
+    endsWith(fileName1, ".bmp") ||
+    endsWith(fileName1, ".PNG") ||
+    endsWith(fileName1, ".TIF") ||
+    endsWith(fileName1, ".TIFF") ||
+    endsWith(fileName1, ".JPEG") ||
+    endsWith(fileName1, ".BMP")) {
+
 // record user text input for first file 
 open(inputFolder + imageList[1]);
 Dialog.create("Enter Text");
@@ -88,18 +163,35 @@ Dialog.addString("Type new filename here:", "");
 Dialog.show();
 inputTitle = Dialog.getString();
 close();
+
 //change the filenames of all images in input folder
-setBatchMode(true);
 imageList1 = getFileList(inputFolder);
+setBatchMode(true);
 for (j=0; j<imageList1.length; j++) // loop through input folder list
 {
+// isolate filename from file extension 
+fileName = imageList[j];
+
+if (endsWith(fileName, ".png") || 
+    endsWith(fileName, ".tif") ||
+    endsWith(fileName, ".tiff") ||
+    endsWith(fileName, ".jpg") ||
+    endsWith(fileName, ".jpeg") ||
+    endsWith(fileName, ".bmp") ||
+    endsWith(fileName, ".PNG") ||
+    endsWith(fileName, ".TIF") ||
+    endsWith(fileName, ".TIFF") ||
+    endsWith(fileName, ".JPEG") ||
+    endsWith(fileName, ".BMP")) {
 open(inputFolder + imageList1[j]);
-newFileName = inputTitle + IJ.pad(j+1,3) + ".png";
-saveAs("PNG", OUTPUT_FOLDER + newFileName);
+newFileName = inputTitle + IJ.pad(j+1,3) + ".tif";
+saveAs("TIF", OUTPUT_FOLDER + newFileName);
 close();
 }
 run("Close All");
+}
 setBatchMode(false);
+}
 waitForUser("Task is complete. Renamed images are in output folder");
 }
 
@@ -115,14 +207,43 @@ File.makeDirectory(OUTPUT_FOLDER);
 imageList = getFileList(inputFolder); // get list of image files in input folder
 
 // open first image to define new size 
+fileName1 = imageList[1];
+if (endsWith(fileName1, ".png") || 
+    endsWith(fileName1, ".tif") ||
+    endsWith(fileName1, ".tiff") ||
+    endsWith(fileName1, ".jpg") ||
+    endsWith(fileName1, ".jpeg") ||
+    endsWith(fileName1, ".bmp") ||
+    endsWith(fileName1, ".PNG") ||
+    endsWith(fileName1, ".TIF") ||
+    endsWith(fileName1, ".TIFF") ||
+    endsWith(fileName1, ".JPEG") ||
+    endsWith(fileName1, ".BMP")) {
+    	
 open(inputFolder + imageList[1]);
 newWidth = getNumber("Type new image WIDTH (in pixels) here:", 0);
 newHeight = getNumber("Type new image HEIGHT (in pixels) here:", 0);
 close();
+}
 
-setBatchMode(true);
 for (j=0; j<imageList.length; j++) // loop through image file list 
 {
+// isolate filename from file extension 
+fileName = imageList[j];
+
+if (endsWith(fileName, ".png") || 
+    endsWith(fileName, ".tif") ||
+    endsWith(fileName, ".tiff") ||
+    endsWith(fileName, ".jpg") ||
+    endsWith(fileName, ".jpeg") ||
+    endsWith(fileName, ".bmp") ||
+    endsWith(fileName, ".PNG") ||
+    endsWith(fileName, ".TIF") ||
+    endsWith(fileName, ".TIFF") ||
+    endsWith(fileName, ".JPEG") ||
+    endsWith(fileName, ".BMP")) {	
+    
+setBatchMode(true);
 open(inputFolder + imageList[j]);
 title = getTitle(); // identify image filename 
 // resize all images in folder
@@ -131,9 +252,98 @@ run("Size...", "width=newWidth height=newHeight depth=1 constrain average interp
 saveAs("PNG", OUTPUT_FOLDER + File.separator + title);
 close();
 }
+}
 run("Close All");
 setBatchMode(false);
 waitForUser("Task is complete. Resized images are in output folder");
+}
+
+// FLIP ALL IMAGES IN FOLDER HORIZONTALLY -------------------------------------------------------------------------------------------------------------------------
+if (TASK == "Flip all images in a folder horizontally") {
+
+waitForUser("Open folder where your raw images are saved");	
+inputFolder = getDirectory("Choose your input folder ");
+
+// ESTABLISH OUTPUT FOLDER
+HORIZONTALLY_FLIPPED_FOLDER = inputFolder + "/HORIZONTALLY_FLIPPED_FOLDER";
+File.makeDirectory(HORIZONTALLY_FLIPPED_FOLDER);
+
+imageList = getFileList(inputFolder); // get list of image files in input folder
+
+for (j=0; j<imageList.length; j++) // loop through image file list 
+{
+// isolate filename from file extension 
+fileName = imageList[j];
+
+if (endsWith(fileName, ".png") || 
+    endsWith(fileName, ".tif") ||
+    endsWith(fileName, ".tiff") ||
+    endsWith(fileName, ".jpg") ||
+    endsWith(fileName, ".jpeg") ||
+    endsWith(fileName, ".bmp") ||
+    endsWith(fileName, ".PNG") ||
+    endsWith(fileName, ".TIF") ||
+    endsWith(fileName, ".TIFF") ||
+    endsWith(fileName, ".JPEG") ||
+    endsWith(fileName, ".BMP")) {
+
+setBatchMode(true);
+open(inputFolder + imageList[j]);
+title = getTitle(); // identify image filename 
+
+run("Flip Horizontally");
+
+saveAs("PNG", HORIZONTALLY_FLIPPED_FOLDER + File.separator + title + "_horizontalFlip");
+run("Close All");
+setBatchMode(false);
+}
+}
+waitForUser("Task is complete. Horizontally flipped images are in output folder");
+}
+
+
+// FLIP ALL IMAGES IN FOLDER VERTICALLY -------------------------------------------------------------------------------------------------------------------------
+if (TASK == "Flip all images in a folder vertically") {
+
+waitForUser("Open folder where your raw images are saved");	
+inputFolder = getDirectory("Choose your input folder ");
+
+// ESTABLISH OUTPUT FOLDER
+VERTICALLY_FLIPPED_FOLDER = inputFolder + "/VERTICALLY_FLIPPED_FOLDER";
+File.makeDirectory(VERTICALLY_FLIPPED_FOLDER);
+
+imageList = getFileList(inputFolder); // get list of image files in input folder
+
+for (j=0; j<imageList.length; j++) // loop through image file list 
+{
+// isolate filename from file extension 
+fileName = imageList[j];
+
+if (endsWith(fileName, ".png") || 
+    endsWith(fileName, ".tif") ||
+    endsWith(fileName, ".tiff") ||
+    endsWith(fileName, ".jpg") ||
+    endsWith(fileName, ".jpeg") ||
+    endsWith(fileName, ".bmp") ||
+    endsWith(fileName, ".PNG") ||
+    endsWith(fileName, ".TIF") ||
+    endsWith(fileName, ".TIFF") ||
+    endsWith(fileName, ".JPEG") ||
+    endsWith(fileName, ".BMP")) {
+
+
+setBatchMode(true);
+open(inputFolder + imageList[j]);
+title = getTitle(); // identify image filename 
+
+run("Flip Vertically");
+
+saveAs("PNG", VERTICALLY_FLIPPED_FOLDER + File.separator + title + "_verticalFlip");
+run("Close All");
+setBatchMode(false);
+}
+}
+waitForUser("Task is complete. Vertically flipped images are in output folder");
 }
 
 // MAKE ALL IMAGES IN FOLDER GRAYSCALE ------------------------------------------------------------------------------------------------------------------------
@@ -141,13 +351,30 @@ if (TASK == "Make all images in folder grayscale") {
 	
 waitForUser("Open folder where your raw images are saved");	
 inputFolder = getDirectory("Choose your input folder ");
+
 // ESTABLISH OUTPUT FOLDER
 OUTPUT_FOLDER = inputFolder + "/OUTPUT_FOLDER/";
 File.makeDirectory(OUTPUT_FOLDER);
 
-setBatchMode(true);
 rawImageFolderFileList=getFileList(inputFolder);
 for (f=0; f<rawImageFolderFileList.length; f++) {
+
+// isolate filename from file extension 
+fileName = rawImageFolderFileList[f];
+
+if (endsWith(fileName, ".png") || 
+    endsWith(fileName, ".tif") ||
+    endsWith(fileName, ".tiff") ||
+    endsWith(fileName, ".jpg") ||
+    endsWith(fileName, ".jpeg") ||
+    endsWith(fileName, ".bmp") ||
+    endsWith(fileName, ".PNG") ||
+    endsWith(fileName, ".TIF") ||
+    endsWith(fileName, ".TIFF") ||
+    endsWith(fileName, ".JPEG") ||
+    endsWith(fileName, ".BMP")) {
+    	
+setBatchMode(true);
 open(inputFolder + rawImageFolderFileList[f]);
 
 rawImage1=getTitle();
@@ -160,7 +387,7 @@ selectImage(rawImage2);
 saveAs("PNG", OUTPUT_FOLDER+File.separator+rawImage1);
 run("Close All");
 }
-
+}
 setBatchMode(false);
 waitForUser("Task is complete. Grayscale images are in output folder");
 }
@@ -226,8 +453,11 @@ waitForUser("Task is complete. Individual image folders have been created");
 // CHANGE FILE FORMAT OF IMAGES ------------------------------------------------------------------------------------------------------------------------
 if (TASK == "Change file format of images") {
 
-Dialog.create("Choose format");
-items2 = newArray("PNG format", "TIFF format", "JPEG format", "BMP format");
+Dialog.create("Choose");
+items2 = newArray("PNG format", 
+                  "TIFF format", 
+                  "JPEG format", 
+                  "BMP format");
 Dialog.addRadioButtonGroup("Options", items2, 4,1, "PNG format");
 Dialog.show;
 TASK2 = Dialog.getRadioButton();
@@ -243,14 +473,30 @@ File.makeDirectory(OUTPUT_FOLDER);
 
 imageList = getFileList(inputFolder); // get list of image files in input folder
 
-setBatchMode(true);
 for (j=0; j<imageList.length; j++) // loop through image file list 
 {
+// isolate filename from file extension 
+fileName = imageList[j];
+
+if (endsWith(fileName, ".png") || 
+    endsWith(fileName, ".tif") ||
+    endsWith(fileName, ".tiff") ||
+    endsWith(fileName, ".jpg") ||
+    endsWith(fileName, ".jpeg") ||
+    endsWith(fileName, ".bmp") ||
+    endsWith(fileName, ".PNG") ||
+    endsWith(fileName, ".TIF") ||
+    endsWith(fileName, ".TIFF") ||
+    endsWith(fileName, ".JPEG") ||
+    endsWith(fileName, ".BMP")) {
+   
+setBatchMode(true);
 open(inputFolder + imageList[j]);
 
 // PNG FORMAT
 rawImage1=getTitle();
 saveAs("PNG", OUTPUT_FOLDER+File.separator+rawImage1);
+}
 run("Close All");
 }
 setBatchMode(false);
@@ -266,14 +512,31 @@ OUTPUT_FOLDER = inputFolder + "/OUTPUT_FOLDER/";
 File.makeDirectory(OUTPUT_FOLDER);
 
 imageList = getFileList(inputFolder); // get list of image files in input folder
-setBatchMode(true);
+
 for (j=0; j<imageList.length; j++) // loop through image file list 
 {
+// isolate filename from file extension 
+fileName = imageList[j];
+
+if (endsWith(fileName, ".png") || 
+    endsWith(fileName, ".tif") ||
+    endsWith(fileName, ".tiff") ||
+    endsWith(fileName, ".jpg") ||
+    endsWith(fileName, ".jpeg") ||
+    endsWith(fileName, ".bmp") ||
+    endsWith(fileName, ".PNG") ||
+    endsWith(fileName, ".TIF") ||
+    endsWith(fileName, ".TIFF") ||
+    endsWith(fileName, ".JPEG") ||
+    endsWith(fileName, ".BMP")) {
+    	
+setBatchMode(true);
 open(inputFolder + imageList[j]);
 
 // TIFF FORMAT
 rawImage1=getTitle();
 saveAs("TIFF", OUTPUT_FOLDER+File.separator+rawImage1);
+}
 run("Close All");
 }
 setBatchMode(false);
@@ -290,14 +553,30 @@ File.makeDirectory(OUTPUT_FOLDER);
 
 imageList = getFileList(inputFolder); // get list of image files in input folder
 
-setBatchMode(true);
 for (j=0; j<imageList.length; j++) // loop through image file list 
 {
+// isolate filename from file extension 
+fileName = imageList[j];
+
+if (endsWith(fileName, ".png") || 
+    endsWith(fileName, ".tif") ||
+    endsWith(fileName, ".tiff") ||
+    endsWith(fileName, ".jpg") ||
+    endsWith(fileName, ".jpeg") ||
+    endsWith(fileName, ".bmp") ||
+    endsWith(fileName, ".PNG") ||
+    endsWith(fileName, ".TIF") ||
+    endsWith(fileName, ".TIFF") ||
+    endsWith(fileName, ".JPEG") ||
+    endsWith(fileName, ".BMP")) {
+    	
+setBatchMode(true);
 open(inputFolder + imageList[j]);
 
 // JPEG FORMAT
 rawImage1=getTitle();
 saveAs("Jpeg", OUTPUT_FOLDER+File.separator+rawImage1);
+}
 run("Close All");
 }
 setBatchMode(false);
@@ -313,14 +592,31 @@ OUTPUT_FOLDER = inputFolder + "/OUTPUT_FOLDER/";
 File.makeDirectory(OUTPUT_FOLDER);
 
 imageList = getFileList(inputFolder); // get list of image files in input folder
-setBatchMode(true);
+
 for (j=0; j<imageList.length; j++) // loop through image file list 
 {
+// isolate filename from file extension 
+fileName = imageList[j];
+
+if (endsWith(fileName, ".png") || 
+    endsWith(fileName, ".tif") ||
+    endsWith(fileName, ".tiff") ||
+    endsWith(fileName, ".jpg") ||
+    endsWith(fileName, ".jpeg") ||
+    endsWith(fileName, ".bmp") ||
+    endsWith(fileName, ".PNG") ||
+    endsWith(fileName, ".TIF") ||
+    endsWith(fileName, ".TIFF") ||
+    endsWith(fileName, ".JPEG") ||
+    endsWith(fileName, ".BMP")) {
+    	
+setBatchMode(true);
 open(inputFolder + imageList[j]);
 
 // BMP FORMAT
 rawImage1=getTitle();
 saveAs("BMP", OUTPUT_FOLDER+File.separator+rawImage1);
+}
 run("Close All");
 }
 setBatchMode(false);
@@ -414,7 +710,12 @@ setBatchMode(true);
 for (v=0; v<videoList.length; v++) {
 	fileName = videoList[v];
 
-if(!(endsWith(fileName, ".avi") || endsWith(fileName, ".mp4") || endsWith(fileName, ".tif"))) {
+if(!(endsWith(fileName, ".avi") || 
+     endsWith(fileName, ".mp4") || 
+     endsWith(fileName, ".tif") || 
+     endsWith(fileName, ".tiff") || 
+     endsWith(fileName, ".TIF") || 
+     endsWith(fileName, ".TIFF"))) {
 	continue;
 }
 open(inputFolder + fileName);
